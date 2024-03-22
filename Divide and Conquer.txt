@@ -1,0 +1,103 @@
+leetcode:
+20-3-2024
+1) Construct Binary Tree from Preorder and inorder Traversal
+class Solution:
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
+        if not preorder or not inorder:
+            return None
+        root=TreeNode()
+        root.val=preorder[0]
+        index=inorder.index(root.val)
+        root.left=self.buildTree(preorder[:index],inorder[0:mid])
+        root.right=self.buildTree(preorder[index+1:],inorder[mid+1:])
+        return root
+2) Construct Binary Tree from inorder and Postorder Traversal
+class Solution:
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> Optional[TreeNode]:
+        if not inorder or not postorder:
+            return None
+        root=TreeNode(postorder[-1])
+        index=inorder.index(postorder[-1])
+        root.left=self.buildTree(inorder[:index],postorder[:index])
+        root.right=self.buildTree(inorder[index+1:],postorder[index:-1])
+        return root
+3) Construct Binary Tree from Preorder and Postorder Traversal
+class Solution:
+    def constructFromPrePost(self, preorder: List[int], postorder: List[int]) -> Optional[TreeNode]:        
+        if not preorder:
+            return None  
+        root = TreeNode(preorder[0])
+        if len(preorder) == 1:
+            return root  
+        left_subtree_root_val = preorder[1]
+        left_subtree_size = postorder.index(left_subtree_root_val) + 1 
+        root.left = self.constructFromPrePost(preorder[1:left_subtree_size+1], postorder[:left_subtree_size])
+        root.right = self.constructFromPrePost(preorder[left_subtree_size+1:], postorder[left_subtree_size:-1])
+        return root
+4)Convert Sorted Array to Binary Search Tree
+class Solution(object):
+    def sortedArrayToBST(self, nums):
+        def helper(start, end):
+            if start > end:
+                return None
+            mid = (start + end) // 2
+            root = TreeNode(nums[mid])
+            root.left = helper(start, mid - 1)
+            root.right = helper(mid + 1, end)
+            return root
+        return helper(0, len(nums) - 1)
+5)Convert Sorted List to Binary Search Tree
+class Solution:
+    def sortedListToBST(self, head: Optional[ListNode]) -> Optional[TreeNode]:
+        sl =[]
+        while head:
+            sl.append(head.val)
+            head = head.next        
+        def make_tree(l,i,j):
+            m=0
+            if i > j:
+                return None
+            elif i==j:
+                return TreeNode(l[i],None,None)
+            if (j-i)%2 ==0:
+                m=(i+j)//2
+            else:
+                m=(i+j+1)//2
+            return TreeNode(l[m],make_tree(l,i,m-1),make_tree(l,m+1,j))
+        return make_tree(sl,0,len(sl)-1)
+6)Maximum Sum Circular Subarray
+class Solution:
+  def maxSubarraySumCircular(self, A: List[int]) -> int:
+    totalSum = 0
+    currMaxSum = 0
+    currMinSum = 0
+    maxSum = -math.inf
+    minSum = math.inf
+    for a in A:
+      totalSum += a
+      currMaxSum = max(currMaxSum + a, a)
+      currMinSum = min(currMinSum + a, a)
+      maxSum = max(maxSum, currMaxSum)
+      minSum = min(minSum, currMinSum)
+    return maxSum if maxSum < 0 else max(maxSum, totalSum - minSum)
+7)Balance a Binary Search Tree
+class Solution:
+    def balanceBST(self, root: TreeNode) -> TreeNode:
+        nums = []
+        def dfs(node):
+            if not node:
+                return 
+            dfs(node.left)
+            nums.append(node.val)
+            dfs(node.right)
+        dfs(root)
+        def balance(left = 0, right = len(nums) - 1):
+            if left > right:
+                return None
+            mid = (left + right) // 2
+            node = TreeNode(nums[mid])
+            node.left = balance(left, mid - 1)
+            node.right = balance(mid + 1, right)
+            return node
+        return balance()
+ max_wrap=total_sum+kadane([-x for x in nums])
